@@ -1,3 +1,4 @@
+import 'package:fl_note_app/components/app_nav.dart';
 import 'package:flutter/material.dart';
 
 class DashBoardPage extends StatelessWidget {
@@ -5,10 +6,19 @@ class DashBoardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text("center"),
+    return Scaffold(
+        body: SafeArea(
+      child: Column(
+        children: [
+          AppNav(),
+          const SizedBox(
+            height: 20,
+          ),
+          ListView(
+            children: [],
+          ),
+        ],
       ),
-    );
+    ));
   }
 }
