@@ -1,5 +1,6 @@
 import 'package:fl_note_app/components/app_nav.dart';
 import 'package:fl_note_app/components/note_tile.dart';
+import 'package:fl_note_app/pages/note_editor.dart';
 import 'package:flutter/material.dart';
 
 class DashBoardPage extends StatelessWidget {
@@ -33,7 +34,10 @@ class DashBoardPage extends StatelessWidget {
         ),
       ),
       floatingActionButton: GestureDetector(
-        onTap: () {},
+        onTap: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const NoteEditor()));
+        },
         child: Container(
           width: 70,
           height: 70,
