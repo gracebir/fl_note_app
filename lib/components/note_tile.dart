@@ -1,4 +1,3 @@
-import 'package:fl_note_app/models/note.dart';
 import 'package:flutter/material.dart';
 
 class NoteTile extends StatelessWidget {
