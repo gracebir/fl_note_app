@@ -1,6 +1,7 @@
 import 'package:fl_note_app/pages/dashboard_page.dart';
 import 'package:flutter/material.dart';
 
+// https://community.distributed.com/networks/events/122492
 void main() {
   runApp(const MyApp());
 }
@@ -13,6 +14,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(fontFamily: "Poppins"),
-        home: DashBoardPage());
+        home: const DashBoardPage());
   }
 }
