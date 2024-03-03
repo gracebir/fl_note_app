@@ -17,16 +17,32 @@ class DashBoardPage extends StatelessWidget {
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 children: [
-                  NoteTile(title: "Digital Marketing", isSync: true),
+                  NoteTile(
+                      title: "Digital Marketing",
+                      content:
+                          """The Design of Everyday Things is required reading for anyone who is interested in the user experience. I personally like to reread it every year or two.Norman is aware of the durability of his work and the applicability of his principles to multiple disciplines.If you know the basics of design better than anyone else, you can apply them flawlessly anywhere""",
+                      isSync: true),
                   NoteTile(
                       title:
                           "Book Review: The Design of Everyday Things by Don Norman",
+                      content:
+                          """The Design of Everyday Things is required reading for anyone who is interested in the user experience. I personally like to reread it every year or two. Norman is aware of the durability of his work and the applicability of his principles to multiple disciplines. If you know the basics of design better than anyone else, you can apply them flawlessly anywhere.""",
                       isSync: false),
                   NoteTile(
-                      title: "Good Design while Going Green", isSync: true),
-                  NoteTile(title: "Life Size Gaming Simulator", isSync: true),
+                      title: "Good Design while Going Green",
+                      content:
+                          """The Design of Everyday Things is required reading for anyone who is interested in the user experience. I personally like to reread it every year or two. Norman is aware of the durability of his work and the applicability of his principles to multiple disciplines.""",
+                      isSync: true),
                   NoteTile(
-                      title: "The most dangerous is comfort", isSync: true),
+                      title: "Life Size Gaming Simulator",
+                      content:
+                          """The Design of Everyday Things is required reading for anyone who is interested in the user experience. I personally like to reread it every year or two. Norman is aware of the durability of his work and the applicability of his principles to multiple disciplines.""",
+                      isSync: true),
+                  NoteTile(
+                      title: "The most dangerous is comfort",
+                      content:
+                          """The Design of Everyday Things is required reading for anyone who is interested in the user experience. I personally like to reread it every year or two.If you know the basics of design better than anyone else, you can apply them flawlessly anywhere.""",
+                      isSync: true),
                 ],
               ),
             )
@@ -35,8 +51,8 @@ class DashBoardPage extends StatelessWidget {
       ),
       floatingActionButton: GestureDetector(
         onTap: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const NoteEditor()));
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => NoteEditor()));
         },
         child: Container(
           width: 70,
