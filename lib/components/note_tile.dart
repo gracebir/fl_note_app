@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class NoteTile extends StatelessWidget {
   final String title;
-  final bool isSync;
+  final String isSync;
   final String? content;
   NoteTile(
       {super.key, required this.title, required this.isSync, this.content});
@@ -12,6 +12,7 @@ class NoteTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Note? note;
+    // ignore: unnecessary_null_comparison
     if (title != null && content != null) {
       note = Note(title: title, content: content!);
     }
@@ -43,7 +44,7 @@ class NoteTile extends StatelessWidget {
             const SizedBox(
               width: 8,
             ),
-            isSync
+            isSync == "Unsynced"
                 ? Image.asset(
                     "lib/assets/sync.png",
                     height: 20,

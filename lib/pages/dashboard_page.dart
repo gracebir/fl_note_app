@@ -1,10 +1,33 @@
 import 'package:fl_note_app/components/app_nav.dart';
 import 'package:fl_note_app/components/note_tile.dart';
+import 'package:fl_note_app/models/note.dart';
 import 'package:fl_note_app/pages/note_editor.dart';
+import 'package:fl_note_app/services/database_helper.dart';
 import 'package:flutter/material.dart';
 
-class DashBoardPage extends StatelessWidget {
+class DashBoardPage extends StatefulWidget {
   const DashBoardPage({super.key});
+
+  @override
+  State<DashBoardPage> createState() => _DashBoardPageState();
+}
+
+class _DashBoardPageState extends State<DashBoardPage> {
+  List<Note>? _notes = [];
+  late DatabaseHelper databaseHelper;
+
+  @override
+  void initState() {
+    super.initState();
+    _refresh();
+  }
+
+  void _refresh() async {
+    final data = await DatabaseHelper.getAllNotes();
+    setState(() {
+      _notes = data;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,36 +37,14 @@ class DashBoardPage extends StatelessWidget {
           children: [
             const AppNav(),
             Expanded(
-              child: ListView(
+              child: ListView.builder(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
-                children: [
-                  NoteTile(
-                      title: "Digital Marketing",
-                      content:
-                          """The Design of Everyday Things is required reading for anyone who is interested in the user experience. I personally like to reread it every year or two.Norman is aware of the durability of his work and the applicability of his principles to multiple disciplines.If you know the basics of design better than anyone else, you can apply them flawlessly anywhere""",
-                      isSync: true),
-                  NoteTile(
-                      title:
-                          "Book Review: The Design of Everyday Things by Don Norman",
-                      content:
-                          """The Design of Everyday Things is required reading for anyone who is interested in the user experience. I personally like to reread it every year or two. Norman is aware of the durability of his work and the applicability of his principles to multiple disciplines. If you know the basics of design better than anyone else, you can apply them flawlessly anywhere.""",
-                      isSync: false),
-                  NoteTile(
-                      title: "Good Design while Going Green",
-                      content:
-                          """The Design of Everyday Things is required reading for anyone who is interested in the user experience. I personally like to reread it every year or two. Norman is aware of the durability of his work and the applicability of his principles to multiple disciplines.""",
-                      isSync: true),
-                  NoteTile(
-                      title: "Life Size Gaming Simulator",
-                      content:
-                          """The Design of Everyday Things is required reading for anyone who is interested in the user experience. I personally like to reread it every year or two. Norman is aware of the durability of his work and the applicability of his principles to multiple disciplines.""",
-                      isSync: true),
-                  NoteTile(
-                      title: "The most dangerous is comfort",
-                      content:
-                          """The Design of Everyday Things is required reading for anyone who is interested in the user experience. I personally like to reread it every year or two.If you know the basics of design better than anyone else, you can apply them flawlessly anywhere.""",
-                      isSync: true),
-                ],
+                itemCount: _notes!.length,
+                itemBuilder: (context, index) => NoteTile(
+                  title: _notes![index].title,
+                  isSync: _notes![index].isSync!,
+                  content: _notes![index].content,
+                ),
               ),
             )
           ],
