@@ -97,7 +97,7 @@ class NoteEditor extends StatelessWidget {
                 ),
                 TextField(
                   controller: _content,
-                  maxLines: 8,
+                  maxLines: 15,
                   decoration: const InputDecoration(
                       border: InputBorder.none,
                       hintText: "Type something...",
