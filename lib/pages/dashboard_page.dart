@@ -13,7 +13,7 @@ class DashBoardPage extends StatefulWidget {
 }
 
 class _DashBoardPageState extends State<DashBoardPage> {
-  List<Note>? _notes = [];
+  late Future<List<Note>?> _notesFuture = Future.value([]);
   late DatabaseHelper databaseHelper;
 
   @override
@@ -23,9 +23,8 @@ class _DashBoardPageState extends State<DashBoardPage> {
   }
 
   void _refresh() async {
-    final data = await DatabaseHelper.getAllNotes();
     setState(() {
-      _notes = data;
+      _notesFuture = DatabaseHelper.getAllNotes();
     });
   }
 
@@ -37,15 +36,33 @@ class _DashBoardPageState extends State<DashBoardPage> {
           children: [
             const AppNav(),
             Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                itemCount: _notes!.length,
-                itemBuilder: (context, index) => NoteTile(
-                  title: _notes![index].title,
-                  isSync: _notes![index].isSync!,
-                  content: _notes![index].content,
-                ),
-              ),
+              child: FutureBuilder<List<Note>?>(
+                  future: _notesFuture,
+                  builder: (context, AsyncSnapshot<List<Note>?> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: Text(snapshot.error.toString()),
+                      );
+                    } else if (snapshot.hasData) {
+                      if (snapshot.data != null) {
+                        return ListView.builder(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) => NoteTile(
+                            title: snapshot.data![index].title,
+                            isSync: snapshot.data![index].syncStatus!,
+                            content: snapshot.data![index].content,
+                          ),
+                        );
+                      } else {
+                        return Container();
+                      }
+                    } else {
+                      return Container();
+                    }
+                  }),
             )
           ],
         ),
@@ -53,7 +70,11 @@ class _DashBoardPageState extends State<DashBoardPage> {
       floatingActionButton: GestureDetector(
         onTap: () {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => NoteEditor()));
+              context,
+              MaterialPageRoute(
+                  builder: (context) => NoteEditor(
+                        onNoteAdded: _refresh,
+                      )));
         },
         child: Container(
           width: 70,

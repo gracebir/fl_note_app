@@ -1,18 +1,19 @@
 import 'package:fl_note_app/models/note.dart';
+import 'package:fl_note_app/services/database_helper.dart';
 import 'package:flutter/material.dart';
 
 class NoteEditor extends StatelessWidget {
   final Note? note;
-  NoteEditor({super.key, this.note});
-
-  final _title = TextEditingController();
-  final _content = TextEditingController();
+  final Function()? onNoteAdded;
+  NoteEditor({super.key, this.note, this.onNoteAdded});
 
   @override
   Widget build(BuildContext context) {
+    final title = TextEditingController();
+    final content = TextEditingController();
     if (note != null) {
-      _title.text = note!.title;
-      _content.text = note!.content;
+      title.text = note!.title;
+      content.text = note!.content;
     }
     return Scaffold(
       body: SafeArea(
@@ -41,7 +42,7 @@ class NoteEditor extends StatelessWidget {
                   children: [
                     note != null
                         ? GestureDetector(
-                            onTap: () {},
+                            onTap: () async {},
                             child: Container(
                               width: 50,
                               height: 50,
@@ -60,7 +61,31 @@ class NoteEditor extends StatelessWidget {
                       width: 15,
                     ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () async {
+                        final titleValue = title.value.text;
+                        final contentValue = content.value.text;
+                        if (titleValue.isEmpty || contentValue.isEmpty) {
+                          return;
+                        }
+                        final Note model = Note(
+                            title: titleValue,
+                            content: contentValue,
+                            noteID: note?.noteID,
+                            syncStatus: "Unsynced",
+                            version: 1,
+                            isDeleted: 0);
+
+                        if (note == null) {
+                          await DatabaseHelper.addNote(model);
+                          print("======================??????=========");
+                        } else {
+                          await DatabaseHelper.updateNote(model);
+                        }
+                        title.clear();
+                        content.clear();
+                        final currentContext = context;
+                        Navigator.pop(currentContext);
+                      },
                       child: Container(
                         alignment: Alignment.center,
                         width: 50,
@@ -85,7 +110,7 @@ class NoteEditor extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextField(
-                  controller: _title,
+                  controller: title,
                   maxLines: 3,
                   decoration: const InputDecoration(
                       border: InputBorder.none,
@@ -95,9 +120,12 @@ class NoteEditor extends StatelessWidget {
                           fontWeight: FontWeight.w500,
                           color: Color(0xff3B3B3B))),
                 ),
+                const SizedBox(
+                  height: 10,
+                ),
                 TextField(
-                  controller: _content,
-                  maxLines: 15,
+                  controller: content,
+                  maxLines: 5,
                   decoration: const InputDecoration(
                       border: InputBorder.none,
                       hintText: "Type something...",

@@ -24,31 +24,33 @@ CREATE TABLE notes (
 
   static Future<int> addNote(Note note) async {
     final db = await _initialDB();
-    return await db.insert("Note", note.toJson(),
+    return await db.insert("notes", note.toJson(),
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   static Future<int> updateNote(Note note) async {
     final db = await _initialDB();
-    return await db.update("Note", note.toJson(),
+    return await db.update("notes", note.toJson(),
         where: 'noteID = ?',
-        whereArgs: [note.id],
+        whereArgs: [note.noteID],
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   static Future<int> deleteNote(Note note) async {
     final db = await _initialDB();
-    return await db.delete(
+    return await db.update(
       "Note",
+      {'isDeleted': 1},
       where: 'noteID = ?',
-      whereArgs: [note.id],
+      whereArgs: [note.noteID],
+      conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
   static Future<List<Note>?> getAllNotes() async {
     final db = await _initialDB();
-    final List<Map<String, dynamic>> maps =
-        await db.query("Note", orderBy: "noteID");
+    final List<Map<String, dynamic>> maps = await db.query("notes",
+        where: 'isDeleted = ?', whereArgs: [0], orderBy: "noteID");
     if (maps.isEmpty) {
       return null;
     }

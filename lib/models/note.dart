@@ -1,17 +1,33 @@
 class Note {
-  final int? id;
+  final int? noteID;
   final String title;
   final String content;
-  final String? isSync;
+  final String? syncStatus;
+  final int? version;
+  final int? isDeleted;
 
-  Note({this.id, required this.title, required this.content, this.isSync});
+  Note(
+      {this.noteID,
+      required this.title,
+      required this.content,
+      this.syncStatus,
+      this.version,
+      this.isDeleted});
 
   factory Note.fromJson(Map<String, dynamic> json) => Note(
       title: json['title'],
       content: json['content'],
-      id: json['id'],
-      isSync: json['isSync']);
+      noteID: json['noteID'],
+      syncStatus: json['syncStatus'],
+      version: json['version'],
+      isDeleted: json['isDeleted']);
 
-  Map<String, dynamic> toJson() =>
-      {'id': id, 'title': title, 'content': content, 'isSync': isSync};
+  Map<String, dynamic> toJson() => {
+        'noteID': noteID,
+        'title': title,
+        'content': content,
+        'syncStatus': syncStatus,
+        'version': version,
+        'isDeleted': isDeleted
+      };
 }
